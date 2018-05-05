@@ -52,25 +52,25 @@ namespace VampzBot.Logic
                     "user",
                     CancellationToken.None,
                     new FileDataStore(credPath, true)).Result;
+
                 Console.WriteLine("Credential file saved to: " + credPath);
+                ValueRange valueRange = new ValueRange();
+                valueRange.MajorDimension = "COLUMNS";
+
+                var objectList = new List<object>() { newCellValue };
+                valueRange.Values = new List<IList<object>> { objectList };
+
+                SheetsService sheetsService = new SheetsService(new BaseClientService.Initializer
+                {
+                    HttpClientInitializer = credential,
+                    ApplicationName = "VampBot"
+                });
+
+
+                SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, googleSpreadsheetId, updateRange);
+                update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+                UpdateValuesResponse result2 = await update.ExecuteAsync();
             }
-
-            ValueRange valueRange = new ValueRange();
-            valueRange.MajorDimension = "COLUMNS";
-
-            var objectList = new List<object>() { newCellValue };
-            valueRange.Values = new List<IList<object>> { objectList };
-
-            SheetsService sheetsService = new SheetsService(new BaseClientService.Initializer
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "VampBot"
-            });
-
-
-            SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, googleSpreadsheetId, updateRange);
-            update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
-            UpdateValuesResponse result2 = await update.ExecuteAsync();
         }
 
         public static async Task<int> GetLastRowSpreadSheet()
