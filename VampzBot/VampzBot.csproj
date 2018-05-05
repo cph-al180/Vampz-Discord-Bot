@@ -154,7 +154,6 @@
     <Compile Include="Logic\GoogleSheetsHandler.cs" />
     <Compile Include="Logic\SecretManager.cs" />
     <Compile Include="Logic\Utility.cs" />
-    <Compile Include="Models\BotUser.cs" />
     <Compile Include="Models\CharacterClass.cs" />
     <Compile Include="Models\Secrets.cs" />
     <Compile Include="Modules\NodeWarModule.cs" />

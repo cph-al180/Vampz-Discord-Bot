@@ -42,6 +42,8 @@ namespace VampzBot
 
             await _client.StartAsync();
 
+            await _client.SetGameAsync("!help");
+
             await Task.Delay(-1);
         }
 
