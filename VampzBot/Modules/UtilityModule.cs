@@ -36,6 +36,7 @@ namespace VampzBot.Modules
             builder.WithTitle("Info");
             builder.AddField("Google Spreadsheet", "https://docs.google.com/spreadsheets/d/1-b3VEuDPxjw3ShSUOUXmnHGsm3PpFPB1RBV9zapIyZ0/edit#gid=2069224530");
             builder.AddField("Github Repository", "https://github.com/cph-al180/Vampz-Discord-Bot");
+            builder.AddField("For any issues or feedback", "Please contact: Taki#3458 or Crusadin#1869");
 
             builder.WithColor(Color.DarkRed);
 

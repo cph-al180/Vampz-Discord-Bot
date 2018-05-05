@@ -37,6 +37,16 @@ namespace VampzBot.Modules
                 await ReplyAsync(Context.Message.Author.Mention, false, errorBuilder);
             }
 
+            if (!IsGearScoreValid(gearScore))
+            {
+                await ReplyAsync(Context.Message.Author.Mention + " There is an issue with your Gear Score. Your input was: " + gearScore);
+            }
+
+            if (!IsLevelValid(level))
+            {
+                await ReplyAsync(Context.Message.Author.Mention + " There is an issue with your Level. Your input was: " + level);
+            }
+
             else
             {
                 if (!(await GoogleSheetsHandler.IsNameAlreadySigned(user.Nickname, currentNodeWarDate)))
@@ -150,6 +160,46 @@ namespace VampzBot.Modules
                 }
             }
             return false;
+        }
+
+        private bool IsGearScoreValid(string input)
+        {
+            int output = 0;
+            if(Int32.TryParse(input, out output) == true)
+            {
+                if(output < 100 && output > 650)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool IsLevelValid(string input)
+        {
+            int output = 0;
+            if (Int32.TryParse(input, out output) == true)
+            {
+                if (output < 50 && output > 65)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
     }
