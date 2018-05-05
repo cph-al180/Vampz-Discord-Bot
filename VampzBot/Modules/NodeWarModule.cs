@@ -25,7 +25,12 @@ namespace VampzBot.Modules
                 await ReplyAsync("No active nodewar scheduled");
             }
 
-            if(IsClassViable(playerClass) == false)
+            else if (!IsGearScoreValid(gearScore))
+            {
+                await ReplyAsync(Context.Message.Author.Mention + " There is an issue with your Gear Score. Your input was: " + gearScore);
+            }
+
+            else if(!IsClassViable(playerClass))
             {
                 var errorBuilder = new EmbedBuilder();
                 var classes = Enum.GetValues(typeof(CharacterClass));
@@ -37,12 +42,7 @@ namespace VampzBot.Modules
                 await ReplyAsync(Context.Message.Author.Mention, false, errorBuilder);
             }
 
-            if (!IsGearScoreValid(gearScore))
-            {
-                await ReplyAsync(Context.Message.Author.Mention + " There is an issue with your Gear Score. Your input was: " + gearScore);
-            }
-
-            if (!IsLevelValid(level))
+            else if (!IsLevelValid(level))
             {
                 await ReplyAsync(Context.Message.Author.Mention + " There is an issue with your Level. Your input was: " + level);
             }
@@ -167,7 +167,7 @@ namespace VampzBot.Modules
             int output = 0;
             if(Int32.TryParse(input, out output) == true)
             {
-                if(output < 100 && output > 650)
+                if(output > 100 && output < 650)
                 {
                     return true;
                 }
@@ -187,7 +187,7 @@ namespace VampzBot.Modules
             int output = 0;
             if (Int32.TryParse(input, out output) == true)
             {
-                if (output < 50 && output > 65)
+                if (output > 50 && output < 65)
                 {
                     return true;
                 }
