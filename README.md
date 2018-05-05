@@ -3,4 +3,3 @@
 TODO:
 
 - Add remove from signups command.
-- Add help command.
