@@ -51,10 +51,8 @@ namespace VampzBot.Logic
                     GoogleClientSecrets.Load(stream).Secrets,
                     Scopes,
                     "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
+                    CancellationToken.None).Result;
 
-                Console.WriteLine("Credential file saved to: " + credPath);
                 ValueRange valueRange = new ValueRange();
                 valueRange.MajorDimension = "COLUMNS";
 
