@@ -10,6 +10,7 @@ using Google.Apis.Sheets.v4;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Sheets.v4.Data;
 using Google.Apis.Util.Store;
+using Discord;
 
 namespace VampzBot.Logic
 {
@@ -66,7 +67,7 @@ namespace VampzBot.Logic
                     ApplicationName = "VampBot"
                 });
 
-
+                Thread.Sleep(500);
                 SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, googleSpreadsheetId, updateRange);
                 update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
                 UpdateValuesResponse result2 = await update.ExecuteAsync();
@@ -97,14 +98,25 @@ namespace VampzBot.Logic
 
         }
 
-        public static async Task<bool> IsNameAlreadySigned(string name, string nodewardate)
+        public static async Task<bool> IsNameAlreadySigned(IGuildUser user, string nodewardate)
         {
             bool alreadySigned = true;
 
             List<string> signedUsers = await GetSignedMembers(nodewardate);
-            if (!signedUsers.Contains(name))
+            
+            if(user.Nickname == null)
             {
-                alreadySigned = false;
+                if (!signedUsers.Contains(user.Username))
+                {
+                    alreadySigned = false;
+                }
+            }
+            else
+            {
+                if (!signedUsers.Contains(user.Nickname))
+                {
+                    alreadySigned = false;
+                }
             }
 
             return alreadySigned;

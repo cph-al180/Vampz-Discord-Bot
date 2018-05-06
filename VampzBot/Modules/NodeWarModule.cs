@@ -49,12 +49,16 @@ namespace VampzBot.Modules
 
             else
             {
-                if (!(await GoogleSheetsHandler.IsNameAlreadySigned(user.Nickname, currentNodeWarDate)))
+                if (!(await GoogleSheetsHandler.IsNameAlreadySigned(user, currentNodeWarDate)))
                 {
                     int appendRow = (await GoogleSheetsHandler.GetLastRowSpreadSheet()) + 1;
 
                     AddSignUpToSpreadSheet("registrations!A" + appendRow, currentNodeWarDate);
-                    AddSignUpToSpreadSheet("registrations!B" + appendRow, user.Nickname);
+
+                    if(DoesUserHaveNickname(user) == true) AddSignUpToSpreadSheet("registrations!B" + appendRow, user.Nickname);
+
+                    else AddSignUpToSpreadSheet("registrations!B" + appendRow, user.Username);
+
                     AddSignUpToSpreadSheet("registrations!C" + appendRow, gearScore);
                     AddSignUpToSpreadSheet("registrations!D" + appendRow, playerClass);
                     AddSignUpToSpreadSheet("registrations!E" + appendRow, level);
@@ -62,7 +66,11 @@ namespace VampzBot.Modules
                     var builder = new EmbedBuilder();
                     builder.WithTitle("Registered for NodeWar");
                     builder.AddField("Date", Utility.FormatGoogleSheetDate(currentNodeWarDate));
-                    builder.AddField("Name", user.Nickname);
+
+                    if (DoesUserHaveNickname(user) == true) builder.AddField("Name", user.Nickname);
+
+                    else builder.AddField("Name", user.Username);
+
                     builder.AddField("GearScore", gearScore);
                     builder.AddField("Class", playerClass);
                     builder.AddField("Level", level);
@@ -125,7 +133,7 @@ namespace VampzBot.Modules
             string date = await GoogleSheetsHandler.GetCurrentNodeWarDate();
             List<string> signedUsers = await GoogleSheetsHandler.GetSignedMembers(date);
 
-            if (!await GoogleSheetsHandler.IsNameAlreadySigned(nickname, date))
+            if (!await GoogleSheetsHandler.IsNameAlreadySigned(user, date))
             {
                 await ReplyAsync(Context.Message.Author.Mention + " You have not signed up yet");
             }
@@ -199,6 +207,18 @@ namespace VampzBot.Modules
             else
             {
                 return false;
+            }
+        }
+
+        private bool DoesUserHaveNickname(IGuildUser user)
+        {
+            if(user.Nickname == null)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
             }
         }
 
