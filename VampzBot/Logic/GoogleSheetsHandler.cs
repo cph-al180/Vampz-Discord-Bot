@@ -65,11 +65,12 @@ namespace VampzBot.Logic
                     ApplicationName = "VampBot"
                 });
 
-                //Thread.Sleep(500);
-                SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, googleSpreadsheetId, updateRange);
-                update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
-                Console.WriteLine("Access Token: " + credential.Token.AccessToken);
-                UpdateValuesResponse result2 = await update.ExecuteAsync();
+                    Thread.Sleep(750);
+                    SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, googleSpreadsheetId, updateRange);
+                    update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+                    Console.WriteLine("Access Token: " + credential.Token.AccessToken);
+                    UpdateValuesResponse result2 = await update.ExecuteAsync();
+
             }
         }
 
@@ -123,14 +124,22 @@ namespace VampzBot.Logic
 
         public static async Task<List<string>> GetSignedMembers(string nodeWarDate)
         {
-            List<string> signedUsers = new List<string>();
-            List<string> ranges = new List<string>();
+           
+                List<string> signedUsers = new List<string>();
+                List<string> ranges = new List<string>();
 
-            Spreadsheet spreadSheet = await GetSpreadSheet(ranges);
+                Spreadsheet spreadSheet = await GetSpreadSheet(ranges);
 
-            signedUsers = spreadSheet.Sheets[1].Data[0].RowData.Where(x => x.Values[0].UserEnteredValue.StringValue == nodeWarDate).Select(x => x.Values[1].UserEnteredValue.StringValue).ToList();
+                signedUsers = spreadSheet.Sheets[1].Data[0].RowData.Where(x => x.Values[0].UserEnteredValue.StringValue == nodeWarDate).Select(x => x.Values[1].UserEnteredValue.StringValue).ToList();
 
-            return signedUsers;
+                if (signedUsers.Contains(null))
+                {
+                    throw new Exception("null entry");
+                }
+
+                return signedUsers;
+
+
         }
     }
 }

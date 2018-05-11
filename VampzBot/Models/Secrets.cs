@@ -6,5 +6,6 @@ namespace VampzBot.Models
         public string DiscordToken;
         public string GoogleApiKey;
         public string GoogleSpreadsheetId;
+        public ulong Taki;
     }
 }
