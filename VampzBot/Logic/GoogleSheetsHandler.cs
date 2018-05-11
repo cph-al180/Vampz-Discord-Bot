@@ -47,11 +47,14 @@ namespace VampzBot.Logic
                     System.Environment.SpecialFolder.Personal);
 
 
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.Load(stream).Secrets,
-                    Scopes,
-                    "user",
-                    CancellationToken.None).Result;
+                
+                var googleAuthToken = await GoogleWebAuthorizationBroker.AuthorizeAsync(
+                        GoogleClientSecrets.Load(stream).Secrets,
+                        Scopes,
+                        "user",
+                        CancellationToken.None);
+                
+                credential = googleAuthToken.Result;
 
                 ValueRange valueRange = new ValueRange();
                 valueRange.MajorDimension = "COLUMNS";
