@@ -69,7 +69,7 @@ namespace VampzBot.Logic
                 SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, googleSpreadsheetId, updateRange);
                 update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
                 Console.WriteLine("Access Token: " + credential.Token.AccessToken);
-                UpdateValuesResponse result2 = await update.ExecuteAsync();
+                UpdateValuesResponse result2 = update.Execute();
 
             }
         }
