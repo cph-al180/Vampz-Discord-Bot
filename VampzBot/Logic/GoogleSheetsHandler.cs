@@ -65,12 +65,11 @@ namespace VampzBot.Logic
                     HttpClientInitializer = credential,
                     ApplicationName = "VampBot"
                 });
-
-                    Thread.Sleep(750);
-                    SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, googleSpreadsheetId, updateRange);
-                    update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
-                    Console.WriteLine("Access Token: " + credential.Token.AccessToken);
-                    UpdateValuesResponse result2 = await update.ExecuteAsync();
+                Thread.Sleep(750);
+                SpreadsheetsResource.ValuesResource.UpdateRequest update = sheetsService.Spreadsheets.Values.Update(valueRange, googleSpreadsheetId, updateRange);
+                update.ValueInputOption = SpreadsheetsResource.ValuesResource.UpdateRequest.ValueInputOptionEnum.RAW;
+                Console.WriteLine("Access Token: " + credential.Token.AccessToken);
+                UpdateValuesResponse result2 = await update.ExecuteAsync();
 
             }
         }
@@ -104,8 +103,8 @@ namespace VampzBot.Logic
             bool alreadySigned = true;
 
             List<string> signedUsers = await GetSignedMembers(nodewardate);
-            
-            if(user.Nickname == null)
+
+            if (user.Nickname == null)
             {
                 if (!signedUsers.Contains(user.Username))
                 {
@@ -125,20 +124,20 @@ namespace VampzBot.Logic
 
         public static async Task<List<string>> GetSignedMembers(string nodeWarDate)
         {
-           
-                List<string> signedUsers = new List<string>();
-                List<string> ranges = new List<string>();
 
-                Spreadsheet spreadSheet = await GetSpreadSheet(ranges);
+            List<string> signedUsers = new List<string>();
+            List<string> ranges = new List<string>();
 
+            Spreadsheet spreadSheet = await GetSpreadSheet(ranges);
+            try
+            {
                 signedUsers = spreadSheet.Sheets[1].Data[0].RowData.Where(x => x.Values[0].UserEnteredValue.StringValue == nodeWarDate).Select(x => x.Values[1].UserEnteredValue.StringValue).ToList();
-
-                if (signedUsers.Contains(null))
-                {
-                    throw new Exception("null entry");
-                }
-
+            }
+            catch (NullReferenceException)
+            {
                 return signedUsers;
+            }
+            return signedUsers;
 
 
         }
